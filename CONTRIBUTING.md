@@ -2,7 +2,8 @@
 This section covers how the project will be managed, and how you can be organized so that nobody is working on the same code, and all code is combined safely.
 
 ## The Project Board
-The main organization for this project will be managed through a project board on Github. To see the board:
+The main organization for this project will be managed through a project board on Github. To go to the board, click 
+[here](https://github.com/FRC-Team-2165/2022/projects/1), or follow these instructions:
 1. Go to the "Projects" tab on Github.
 2. Click on the "Projects" option on the left that has a "1" next to it.
 3. Click on "2022 - Rapid React".
@@ -29,7 +30,7 @@ All of the current tasks will be listed under the "To do" column of the project 
 
 ### Finishing a Task.
 When you think you've completed your task:
-1. Create a pull request (See: Pull Requests).
+1. Create a pull request (See: [Pull Requests](#pull-requests)).
 2. When the pull request is approved, if a mentor doesn't automatically handle it, click on the card you were working on in the project board.
 3. On the right, click the "Close issue" button.
 4. Take a break. You've earned it.
@@ -113,9 +114,9 @@ The main code in the project is going to be in the `master` branch (which is the
 branch into master, you will need to make a "pull request" on Github. Never create a pull request for code you haven't tested.
 
 1. Make sure your changes are pushed to your branch on Github. If they haven't been, do that first.
-2. On Github, click on the "Pull requests" tab near the top, below the name of the repository (not the one on the very top menu bar).
+2. On Github, click on the [Pull requests](https://github.com/FRC-Team-2165/2022/pulls) tab near the top, below the name of the repository (not the one on the very top menu bar).
 3. Click on the green "New pull request" button on the right.
-4. You will see two  dropdowns in the middle left, which likely say something like "base: master" and "compare:master". 
+4. You will see two  dropdowns in the middle left, which likely say something like "base: master" and "compare: master". 
 5. Click on the dropdown that says "compare", and select the branch you want to merge into `master`.
 6. The changes between the branches should show up. Click the green "Create pull request" button.
 7. On the new page, give a title to your pull request, and fill in the larger box with the details of what you've changed. 
