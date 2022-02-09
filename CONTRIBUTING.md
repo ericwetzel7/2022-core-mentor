@@ -8,14 +8,32 @@ The main organization for this project will be managed through a project board o
 3. Click on "2022 - Rapid React".
 
 You should now see a board that has 4 columns: "To do", "In Progress", "In review", and "Done".
-### To Do
-This column contains all of the things yet to be done. 
-### In Progress
+#### To Do
+This column contains all of the things yet to be done. Only create a card here if a mentor has told you to.
+#### In Progress
 This column contains all of the tasks currently being worked on.
-### In Review 
-This column contains all of the tasks that have been worked on, but haven't been approved yet.
-### Done
-This column is all previous tasks that have been completed. This column is purely for documentation.
+#### In Review 
+This column contains all of the tasks that have been worked on, but haven't been approved yet. 
+You should never move anything in or out of this column directly. This is all automated.
+#### Done
+This column is all previous tasks that have been completed. This column is purely for documentation, 
+and you should never manually move cards here.
+
+### Selecting a Task from the Project Board
+All of the current tasks will be listed under the "To do" column of the project board.
+1. Find something you want to work on in the "To do" column. 
+2. Click on that card, and you'll see a short description of what is needed pop up on the right.
+3. Under "Assignees", click the gear and select your username. This assigns you to the task.
+4. Drag the card to the "In progress" column.
+5. Get to work.
+
+### Finishing a Task.
+When you think you've completed your task:
+1. Create a pull request (See: Pull Requests).
+2. When the pull request is approved, if a mentor doesn't automatically handle it, click on the card you were working on in the project board.
+3. On the right, click the "Close issue" button.
+4. Take a break. You've earned it.
+5. Now go to work on the next task.
 
 
 # Git Workflow
@@ -89,4 +107,24 @@ You should never touch any branch named `master` or `deploy`. These are purely f
 
 If you don't see the branch you want to edit, it doesn't exist. If you thought it did, talk to the programming mentor (probably Kellen), 
 and they'll help you sort it out. Otherwise, create it using the instructions in "Creating a New Branch".
+
+## Pull Requests
+The main code in the project is going to be in the `master` branch (which is the primary reason it's not accessible to everybody). In order to merge your 
+branch into master, you will need to make a "pull request" on Github. Never create a pull request for code you haven't tested.
+
+1. Make sure your changes are pushed to your branch on Github. If they haven't been, do that first.
+2. On Github, click on the "Pull requests" tab near the top, below the name of the repository (not the one on the very top menu bar).
+3. Click on the green "New pull request" button on the right.
+4. You will see two  dropdowns in the middle left, which likely say something like "base: master" and "compare:master". 
+5. Click on the dropdown that says "compare", and select the branch you want to merge into `master`.
+6. The changes between the branches should show up. Click the green "Create pull request" button.
+7. On the new page, give a title to your pull request, and fill in the larger box with the details of what you've changed. 
+    - Go for high-level but detailed.
+8. On the right side, in the "Reviewers" area, click the gear, then select on of the programming mentors (probably Kellen).
+9. In the "Projects" area, click the gear, then select the project board (probably 2022 - Rapid React).
+10. Click the green "Create pull request" button
+
+If your code works, a mentor will review the pull request and approve it, and you can move onto the next task. 
+If they come back with things for you to fix, then make those fixes, and push your changes to the same branch 
+you were working on before. Those changes will be automatically added to the pull request, and it will be updated accordingly.
 
