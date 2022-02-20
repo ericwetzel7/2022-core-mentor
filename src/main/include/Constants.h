@@ -5,18 +5,16 @@
 #pragma once
 
 namespace constants {
-    namespace can {
-        int FRONT_LEFT_MOTOR = 0;
-        int REAR_LEFT_MOTOR = 1;
-        int FRONT_RIGHT_MOTOR = 2;
-        int REAR_RIGHT_MOTOR = 3;
-    }
+    namespace drive {
+        constexpr int FRONT_LEFT_MOTOR = 0;
+        constexpr int REAR_LEFT_MOTOR = 1;
+        constexpr int FRONT_RIGHT_MOTOR = 2;
+        constexpr int REAR_RIGHT_MOTOR = 3;
 
-    namespace dio {
-        int LINE_SENSOR = 0;
-    }
+        constexpr int LINE_SENSOR = 0;
+        
+        constexpr int MOTOR_COUNT = 4;
 
-    namespace pwm {
-
+        constexpr double DEFAULT_DEADBAND = 0.02;
     }
 }
