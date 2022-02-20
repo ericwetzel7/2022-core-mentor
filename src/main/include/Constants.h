@@ -17,4 +17,13 @@ namespace constants {
 
         constexpr double DEFAULT_DEADBAND = 0.02;
     }
+
+    namespace intake {
+        constexpr int FORWARD_SOLENOID = 0;
+        constexpr int REVERSE_SOLENOID = 1;
+
+        constexpr int ROLLER_MOTOR = 0;
+
+        constexpr double DEFAULT_ROLLER_SPEED = 0.5;
+    }
 }
