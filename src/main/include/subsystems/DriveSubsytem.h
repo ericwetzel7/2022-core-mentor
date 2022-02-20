@@ -38,6 +38,8 @@ private:
 
     frc::DigitalInput lineSensor{constants::drive::LINE_SENSOR};
 
+    // Basic functional iterator. Accumulation can be done by 
+    // capturing the accumulator in a lambda.
     void eachMotor(std::function<void(rev::CANSparkMax&)> f) {
         f(frontLeft);
         f(rearLeft);
