@@ -1,1 +1,1 @@
-#prage once
+#pragma once
