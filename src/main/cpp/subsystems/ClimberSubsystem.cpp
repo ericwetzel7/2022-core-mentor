@@ -18,7 +18,7 @@ void ClimberSubsystem::toggleLower() {
 }
 
 bool ClimberSubsystem::isRetracted() {
-    liftSwitch.Get();
+    return liftSwitch.Get();
 }
 
 void ClimberSubsystem::extendUpper(bool requireSafe) {

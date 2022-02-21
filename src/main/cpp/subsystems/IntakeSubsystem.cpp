@@ -3,7 +3,7 @@
 
 IntakeSubsystem::IntakeSubsystem() : IntakeSubsystem(constants::intake::DEFAULT_ROLLER_SPEED) {}
 
-IntakeSubsystem::IntakeSubsystem(double defaultSpeed) : rollerSpeed(defaultSpeed), defaultSpeed(defaultSpeed) {
+IntakeSubsystem::IntakeSubsystem(double defSpeed) : defaultSpeed(defSpeed), rollerSpeed(defSpeed) {
     retractArm();
 }
 
