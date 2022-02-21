@@ -37,4 +37,13 @@ namespace constants {
             constexpr double D = 0.01;
         }
     }
+
+    namespace climber {
+        constexpr int LOWER_FORWARD_SOLENOID = 2;
+        constexpr int LOWER_REVERSE_SOLENOID = 3;
+        constexpr int UPPER_FORWARD_SOLENOID = 4;
+        constexpr int UPPER_REVERSE_SOLENOID = 5;
+
+        constexpr int LIFT_SWITCH = 0;
+    }
 }
