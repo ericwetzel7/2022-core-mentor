@@ -22,12 +22,20 @@ void TransportSubsystem::disableOuterBelt() {
     outerBelt.Set(0);
 }
 
+void TransportSubsystem::reverseOuterBelt(bool requireSafety) {
+    outerBelt.Set(-constants::transport::OUTER_BELT_SPEED);
+}
+
 void TransportSubsystem::enableInnerBelt(bool requireSafety) {
     innerBelt.Set(constants::transport::INNER_BELT_SPEED);
 }
 
 void TransportSubsystem::disableInnerBelt() {
     innerBelt.Set(0);
+}
+
+void TransportSubsystem::reverseInnerBelt(bool requireSafety) {
+    innerBelt.Set(-constants::transport::INNER_BELT_SPEED);
 }
 
 bool TransportSubsystem::hasOuterBall() {

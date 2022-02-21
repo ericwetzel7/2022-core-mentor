@@ -21,8 +21,10 @@ public:
 
     void enableOuterBelt(bool requireSafety = true);
     void disableOuterBelt();
+    void reverseOuterBelt(bool requireSafety = true);
     void enableInnerBelt(bool requireSafety = true);
     void disableInnerBelt();
+    void reverseInnerBelt(bool requireSafety = true);
 
     bool hasOuterBall();
     bool hasInnerBall();
