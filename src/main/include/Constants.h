@@ -46,4 +46,15 @@ namespace constants {
 
         constexpr int LIFT_SWITCH = 0;
     }
+
+    namespace transport {
+        constexpr int INNER_BALL_SWITCH = 0;
+        // constexpr int OUTER_COLOR_SENSOR = 0;
+
+        constexpr int INNER_BELT_MOTOR = 0;
+        constexpr int OUTER_BELT_MOTOR = 1;
+
+        constexpr double INNER_BELT_SPEED = 0.5;
+        constexpr double OUTER_BELT_SPEED = 0.5;
+    }
 }

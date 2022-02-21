@@ -1,1 +1,66 @@
 #include "subsystems/TransportSubsystem.h"
+
+#include <stdexcept>
+
+TransportSubsystem::TransportSubsystem(frc::DriverStation::Alliance alliance) {
+    changeAlliance(alliance);
+}
+
+void TransportSubsystem::changeAlliance(frc::DriverStation::Alliance alliance) {
+    if(alliance == frc::DriverStation::Alliance::kInvalid) {
+        // yes, this is terrible, but you absolutely deserve what you get
+        throw std::invalid_argument("Can't have an invalid alliance");
+    }
+    currentAlliance = alliance;
+}
+
+void TransportSubsystem::enableOuterBelt(bool requireSafety) {
+    outerBelt.Set(constants::transport::OUTER_BELT_SPEED);
+}
+
+void TransportSubsystem::disableOuterBelt() {
+    outerBelt.Set(0);
+}
+
+void TransportSubsystem::enableInnerBelt(bool requireSafety) {
+    innerBelt.Set(constants::transport::INNER_BELT_SPEED);
+}
+
+void TransportSubsystem::disableInnerBelt() {
+    innerBelt.Set(0);
+}
+
+bool TransportSubsystem::hasOuterBall() {
+    return outerColorSensor.GetProximity() > 2000; // ?
+}
+
+bool TransportSubsystem::hasInnerBall() {
+    return innerBallSwitch.Get();
+}
+
+frc::Color TransportSubsystem::outerBallColor() {
+    return outerColorSensor.GetColor();
+}
+
+bool TransportSubsystem::outerBallMatchesAlliance() {
+    frc::Color ball = outerBallColor();
+    switch(currentAlliance) {
+    case frc::DriverStation::Alliance::kBlue:
+        return dominantColor(ball) == RGB::BLUE;
+    case frc::DriverStation::Alliance::kRed:
+        return dominantColor(ball) == RGB::RED;
+    }
+}
+
+TransportSubsystem::RGB TransportSubsystem::dominantColor(frc::Color color) {
+    // 0.2 picked semi-randomly. Mostly meant to act as a noise filter.
+    if(color.red >= color.blue + 0.2 && color.red >= color.green + 0.2) {
+        return RGB::RED;
+    } else if (color.green >= color.red + 0.2 && color.green >= color.blue + 0.2) {
+        return RGB::GREEN;
+    } else if (color.blue >= color.red + 0.2 && color.blue >= color.green + 0.2) {
+        return RGB::BLUE;
+    } else {
+        return RGB::INDETERMINATE;
+    }
+}
