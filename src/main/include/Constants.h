@@ -26,4 +26,15 @@ namespace constants {
 
         constexpr double DEFAULT_ROLLER_SPEED = 0.5;
     }
+
+    namespace shooter {
+        constexpr int SHOOTER_MOTOR = 0;
+    
+        constexpr double FLYWHEEL_RPM = 2700;
+        namespace pid {
+            constexpr double P = 0.01;
+            constexpr double I = 0.01;
+            constexpr double D = 0.01;
+        }
+    }
 }
