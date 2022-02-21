@@ -4,24 +4,24 @@ ShooterSubsystem::ShooterSubsystem() : ShooterSubsystem(constants::shooter::FLYW
 
 ShooterSubsystem::ShooterSubsystem(double rpm) :flywheelRPM(rpm) {
     flywheelPID.SetReference(constants::shooter::FLYWHEEL_RPM,
-                             rev::ControlType::kVelocity);
+                             rev::CANSparkMax::ControlType::kVelocity);
     flywheelPID.SetP(constants::shooter::pid::P);
     flywheelPID.SetI(constants::shooter::pid::I);
     flywheelPID.SetD(constants::shooter::pid::D);
 }
 
 void ShooterSubsystem::enableFlywheel() {
-    flywheelPID.SetReference(flywheelRPM, rev::ControlType::kVelocity);
+    flywheelPID.SetReference(flywheelRPM, rev::CANSparkMax::ControlType::kVelocity);
 }
 
 void ShooterSubsystem::disableFlywheel() {
-    flywheelPID.SetReference(0, rev::ControlType::kVelocity);
+    flywheelPID.SetReference(0, rev::CANSparkMax::ControlType::kVelocity);
 }
 
 
 void ShooterSubsystem::setSpeed(double rpm) { 
     flywheelRPM = rpm;
-    flywheelPID.SetReference(rpm, rev::ControlType::kVelocity);
+    flywheelPID.SetReference(rpm, rev::CANSparkMax::ControlType::kVelocity);
 }
 
 void ShooterSubsystem::resetSpeed() {
