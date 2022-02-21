@@ -16,9 +16,13 @@ class DriveSubsystem : public frc2::SubsystemBase {
 public:
     DriveSubsystem();
     DriveSubsystem(double deadband);
+    DriveSubsystem(double deadband, bool squareXInput, bool squareYInput, bool squareRotInput);
     ~DriveSubsystem() noexcept {}
 
-    void drive(double xSpeed, double ySpeed, double rotation);
+    void drive(double xSpeed, double ySpeed, double rotation, bool correctRotation = true);
+    // returns false if not at that angle, else
+    // returns true and resets the gyro.
+    bool turnToAngle(double angle, double error = 0.25);
 
     double distance();
     void resetDistance();
@@ -27,7 +31,17 @@ public:
     double orientation();
 
     bool seesLine();
+
+    void squareXInput(bool square = false) {squareX = square;}
+    void squareYInput(bool square = false) {squareY = square;}
+    void squareRotInput( bool square = false) {squareRot = square;}
 private:
+    double deadband;
+
+    bool squareX;
+    bool squareY;
+    bool squareRot;
+
     rev::CANSparkMax frontLeft{constants::drive::FRONT_LEFT_MOTOR, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax rearLeft{constants::drive::REAR_LEFT_MOTOR, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax frontRight{constants::drive::FRONT_RIGHT_MOTOR, rev::CANSparkMax::MotorType::kBrushless};

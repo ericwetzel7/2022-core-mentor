@@ -10,12 +10,14 @@ namespace constants {
         constexpr int REAR_LEFT_MOTOR = 1;
         constexpr int FRONT_RIGHT_MOTOR = 2;
         constexpr int REAR_RIGHT_MOTOR = 3;
-
         constexpr int LINE_SENSOR = 0;
-        
+
         constexpr int MOTOR_COUNT = 4;
 
         constexpr double DEFAULT_DEADBAND = 0.02;
+        constexpr double ROTATION_ADJUSTMENT_RATE = 0.05;
+
+        constexpr double SELF_ROTATION_SPEED = 0.6;
     }
 
     namespace intake {
