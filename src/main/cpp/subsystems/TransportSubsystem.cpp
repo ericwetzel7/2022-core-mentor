@@ -9,7 +9,7 @@ TransportSubsystem::TransportSubsystem(frc::DriverStation::Alliance alliance) {
 void TransportSubsystem::changeAlliance(frc::DriverStation::Alliance alliance) {
     if(alliance == frc::DriverStation::Alliance::kInvalid) {
         // yes, this is terrible, but you absolutely deserve what you get
-        throw std::invalid_argument("Can't have an invalid alliance");
+        throw std::domain_error("Can't have an invalid alliance");
     }
     currentAlliance = alliance;
 }
