@@ -31,17 +31,9 @@ void DriveSubsystem::drive(double xSpeed, double ySpeed, double rotation, bool c
     }
 }
 
-bool DriveSubsystem::turnToAngle(double angle, double error) {
-    double gyroAngle = gyro.GetAngle();
-    if(angle < error || angle > -error) {
-        gyro.Reset();
-        return true;
-    } else {
-        int sign = 1 - (2 * angle >= 180);
-        double turnSpeed = sign * constants::drive::SELF_ROTATION_SPEED;
-        mecanumDrive.DriveCartesian(0, 0, turnSpeed);
-        return false;
-    }
+void DriveSubsystem::freeTurn(double speed) {
+    speed = pow(speed, 1 + squareRot * 0.5);
+    mecanumDrive.DriveCartesian(0, 0, speed);
 }
 
 double DriveSubsystem::distance() {

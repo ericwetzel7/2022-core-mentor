@@ -20,9 +20,9 @@ public:
     ~DriveSubsystem() noexcept {}
 
     void drive(double xSpeed, double ySpeed, double rotation, bool correctRotation = true);
-    // returns false if not at that angle, else
-    // returns true and resets the gyro.
-    bool turnToAngle(double angle, double error = 0.25);
+    // turn without resetting the gyro. Useful for rotating to a 
+    // specific angle.
+    void freeTurn(double speed);
 
     double distance();
     void resetDistance();
