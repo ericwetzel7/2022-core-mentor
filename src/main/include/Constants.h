@@ -5,6 +5,8 @@
 #pragma once
 
 namespace constants {
+    constexpr int CONTROL1 = 0;
+
     namespace drive {
         constexpr int FRONT_LEFT_MOTOR = 0;
         constexpr int REAR_LEFT_MOTOR = 1;

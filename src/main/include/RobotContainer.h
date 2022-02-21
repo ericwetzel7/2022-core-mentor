@@ -5,6 +5,13 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc/Joystick.h>
+
+#include "subsystems/ClimberSubsystem.h"
+#include "subsystems/DriveSubsytem.h"
+#include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/TransportSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -19,6 +26,13 @@ public:
 
 private:
   // The robot's subsystems and commands are defined here...
+  DriveSubsystem driveSubsystem;
+  ClimberSubsystem climberSubsystem;
+  IntakeSubsystem intakeSubsystem;
+  ShooterSubsystem shooterSubsystem;
+  TransportSubsystem transportSubsystem;
+
+  frc::Joystick control1{constants::CONTROL1};
 
   void ConfigureButtonBindings();
 };
