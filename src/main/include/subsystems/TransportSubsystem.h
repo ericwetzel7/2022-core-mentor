@@ -43,7 +43,7 @@ private:
     frc::DriverStation::Alliance currentAlliance;
 
     frc::DigitalInput innerBallSwitch{constants::transport::INNER_BALL_SWITCH};
-    rev::ColorSensorV3 outerColorSensor{frc::I2C::Port::kOnboard};
+    rev::ColorSensorV3 outerColorSensor{frc::I2C::Port::kMXP};
 
     WPI_TalonSRX innerBelt{constants::transport::INNER_BELT_MOTOR};
     WPI_TalonSRX outerBelt{constants::transport::OUTER_BELT_MOTOR};
