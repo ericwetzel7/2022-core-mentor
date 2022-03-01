@@ -57,6 +57,9 @@ bool TransportSubsystem::outerBallMatchesAlliance() {
         return dominantColor(ball) == RGB::BLUE;
     case frc::DriverStation::Alliance::kRed:
         return dominantColor(ball) == RGB::RED;
+    default:
+        // Will never happen. Just shuts up the "unahndled cases" compiler warning
+        return false;
     }
 }
 
