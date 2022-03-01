@@ -83,12 +83,12 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::Trigger([this]{return controller.GetPOV() == 180;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, false));
   // D-pad down - drive forwards to line
   frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
-  frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(shootCommand);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(&shootCommand);
 #else
   frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
   frc2::JoystickButton(&control2, 1).WhenHeld(run_intake_roller);
   frc2::JoystickButton(&control2, 5).WhenHeld(reverse_outer_transport);
-  frc2::JoystickButton(&control1, 1).WhenPressed(shootCommand);
+  frc2::JoystickButton(&control1, 1).WhenPressed(&shootCommand);
   // drive backwards to line
   frc2::JoystickButton(&control1, 10).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
   // drive forwards to line
