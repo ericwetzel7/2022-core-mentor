@@ -11,6 +11,7 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/WaitCommand.h>
+#include <frc2/command/WaitUntilCommand.h>
 #include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/button/Trigger.h>
 
@@ -83,6 +84,18 @@ void RobotContainer::ConfigureButtonBindings() {
     {&transportSubsystem}
   );
 
+  // Performs the climbing procedure. Robot in permanent altered state for rest of game.
+  auto climb = frc2::SequentialCommandGroup(
+    frc2::InstantCommand([this]{climberSubsystem.retractLower();}),
+    frc2::WaitUntilCommand([this]{return climberSubsystem.isRetracted();}),
+    frc2::InstantCommand([this]{climberSubsystem.extendUpper();}),
+    frc2::WaitCommand(2.0_s),
+    frc2::InstantCommand([this]{climberSubsystem.extendLower();}),
+    frc2::WaitCommand(1.0_s),
+    frc2::InstantCommand([this]{climberSubsystem.retractLower();})
+  );
+  climb.AddRequirements(&climberSubsystem);
+
   // Shifts a ball from the inner position to the shooter.
   auto shootCommand = frc2::SequentialCommandGroup(
     frc2::InstantCommand([this]{transportSubsystem.enableInnerBelt();}),
@@ -103,6 +116,7 @@ void RobotContainer::ConfigureButtonBindings() {
   // D-pad down - drive forwards to line
   frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
   frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(&shootCommand);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kStart).WhenPressed(&climb);
 #else
   // Button bindings for Joysticks.
   frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
@@ -113,6 +127,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&control1, 10).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
   // drive forwards to line
   frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
+  frc2::JoystickButton(&control2, 8).WhenPressed(&climb);
 #endif
   // controller independent triggers
   // shift outer balls inward until there is an inner ball
