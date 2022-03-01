@@ -11,6 +11,7 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/WaitCommand.h>
+#include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/button/Trigger.h>
 
 #include <units/time.h>
@@ -63,11 +64,20 @@ void RobotContainer::ConfigureButtonBindings() {
   );
 
   auto auto_shift_condition = [this]{
-    return transportSubsystem.hasOuterBall() && !transportSubsystem.hasInnerBall();
+    // return transportSubsystem.hasOuterBall() && !transportSubsystem.hasInnerBall();
+    return !transportSubsystem.hasInnerBall();
   };
   
   auto transport_inward_shift = InwardShiftCommand(&transportSubsystem);
-  
+
+  auto transport_outer_load = frc2::FunctionalCommand(
+    [this] {transportSubsystem.enableOuterBelt();},
+    [this] {},
+    [this] (bool){transportSubsystem.disableOuterBelt();},
+    [this] {return transportSubsystem.hasOuterBall();},
+    {&transportSubsystem}
+  );
+
   auto shootCommand = frc2::SequentialCommandGroup(
     frc2::InstantCommand([this]{transportSubsystem.enableInnerBelt();}),
     frc2::WaitCommand(0.5_s)
@@ -95,7 +105,10 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
 #endif
   // controller independent triggers
+  // shift outer balls inward until there is an inner ball
   frc2::Trigger(auto_shift_condition).WhenActive(transport_inward_shift);
+  // run outer belt until there is an outer ball.
+  frc2::Trigger([this] {return !transportSubsystem.hasOuterBall();}).WhenActive(transport_outer_load);
   
   // TODO list
   // - enable outer belt while roller running until ball present - automatic behaviour or button?
