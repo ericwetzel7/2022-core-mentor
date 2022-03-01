@@ -84,6 +84,13 @@ void RobotContainer::ConfigureButtonBindings() {
     {&transportSubsystem}
   );
 
+  auto toggle_lower_arms = frc2::InstantCommand([this]{climberSubsystem.toggleLower();});
+  auto upper_arms_release = frc2::StartEndCommand(
+    [this]{climberSubsystem.extendUpper();},
+    [this]{climberSubsystem.retractUpper();},
+    {&climberSubsystem}
+  );
+
   // Performs the climbing procedure. Robot in permanent altered state for rest of game.
   auto climb = frc2::SequentialCommandGroup(
     frc2::InstantCommand([this]{climberSubsystem.retractLower();}),
@@ -117,6 +124,10 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
   frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(&shootCommand);
   frc2::JoystickButton(&controller, frc::XboxController::Button::kStart).WhenPressed(&climb);
+  
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kA).WhenPressed(toggle_lower_arms);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
+    frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper).ToggleWhenActive(upper_arms_release);
 #else
   // Button bindings for Joysticks.
   frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
@@ -128,6 +139,9 @@ void RobotContainer::ConfigureButtonBindings() {
   // drive forwards to line
   frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
   frc2::JoystickButton(&control2, 8).WhenPressed(&climb);
+
+  frc2::JoystickButton(&control2, 6).WhenPressed(toggle_lower_arms);
+  frc2::JoystickButton(&control2, 5).ToggleWhenPressed(upper_arms_release);
 #endif
   // controller independent triggers
   // shift outer balls inward until there is an inner ball
