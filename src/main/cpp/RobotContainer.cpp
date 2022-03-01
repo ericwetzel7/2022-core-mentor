@@ -35,12 +35,15 @@ RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAll
 }
 
 void RobotContainer::ConfigureButtonBindings() {
+  // extends/retracts the roller arm of the intake
   auto toggle_intake_arm = frc2::StartEndCommand(
     [this] {this->intakeSubsystem.extendArm();},
     [this] {this->intakeSubsystem.retractArm();},
     {&intakeSubsystem}
   );
 
+  // Run the intake roller. Run it in reverse if button 10 pressed on Joystick, 
+  // or left bumper pressed on Xbox controller.
   auto run_intake_roller = frc2::StartEndCommand(
     [this] {
 #ifdef USE_XBOX_CONTROLS
@@ -57,6 +60,7 @@ void RobotContainer::ConfigureButtonBindings() {
     {&intakeSubsystem}
   );
 
+  // Runs the outer transport belt in reverse
   auto reverse_outer_transport = frc2::StartEndCommand(
     [this] {transportSubsystem.reverseOuterBelt();},
     [this] {transportSubsystem.disableOuterBelt();},
@@ -67,9 +71,10 @@ void RobotContainer::ConfigureButtonBindings() {
     // return transportSubsystem.hasOuterBall() && !transportSubsystem.hasInnerBall();
     return !transportSubsystem.hasInnerBall();
   };
-  
+  // Shifts balls from outer position to inner position  
   auto transport_inward_shift = InwardShiftCommand(&transportSubsystem);
 
+  // Runs the outer belt until it has a ball in place.
   auto transport_outer_load = frc2::FunctionalCommand(
     [this] {transportSubsystem.enableOuterBelt();},
     [this] {},
@@ -78,13 +83,17 @@ void RobotContainer::ConfigureButtonBindings() {
     {&transportSubsystem}
   );
 
+  // Shifts a ball from the inner position to the shooter.
   auto shootCommand = frc2::SequentialCommandGroup(
     frc2::InstantCommand([this]{transportSubsystem.enableInnerBelt();}),
     frc2::WaitCommand(0.5_s)
   );
   shootCommand.AddRequirements(&transportSubsystem);
 
+  // Both sets of bindings have equivalant capabilities. 
+  // The only difference is which control scheme is being used.
 #ifdef USE_XBOX_CONTROLS
+  // Button bindings for Xbox Controller
   frc2::JoystickButton(&controller, frc::XboxController::Button::kX).ToggleWhenPressed(toggle_intake_arm);
   frc2::JoystickButton(&controller, frc::XboxController::Button::kY).WhenHeld(run_intake_roller);
   // D-pad left
@@ -95,6 +104,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
   frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(&shootCommand);
 #else
+  // Button bindings for Joysticks.
   frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
   frc2::JoystickButton(&control2, 1).WhenHeld(run_intake_roller);
   frc2::JoystickButton(&control2, 5).WhenHeld(reverse_outer_transport);
@@ -111,7 +121,6 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::Trigger([this] {return !transportSubsystem.hasOuterBall();}).WhenActive(transport_outer_load);
   
   // TODO list
-  // - enable outer belt while roller running until ball present - automatic behaviour or button?
 }
 
 frc2::Command* RobotContainer::autonomousCommand() {
