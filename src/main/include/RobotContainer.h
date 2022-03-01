@@ -30,6 +30,7 @@ class RobotContainer {
 public:
   RobotContainer();
 
+  frc2::Command* autonomousCommand();
 private:
   // The robot's subsystems and commands are defined here...
   DriveSubsystem driveSubsystem;
@@ -44,4 +45,6 @@ private:
   frc::Joystick control2{constants::CONTROL2};
 #endif
   void ConfigureButtonBindings();
+
+  frc2::Command* autocmd;
 };

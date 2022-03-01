@@ -35,13 +35,19 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-
+  auto command = m_container.autonomousCommand();
+  if(command != nullptr) {
+    command->Schedule(false);
+  }
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
-
+  auto command = m_container.autonomousCommand();
+  if(command != nullptr) {
+    command->Cancel();
+  }
 }
 
 /**
