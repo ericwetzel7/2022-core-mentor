@@ -6,6 +6,7 @@
 
 namespace constants {
     constexpr int CONTROL1 = 0;
+    constexpr int CONTROL2 = 1;
 
     namespace drive {
         constexpr int FRONT_LEFT_MOTOR = 0;

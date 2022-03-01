@@ -33,6 +33,7 @@ private:
   TransportSubsystem transportSubsystem;
 
   frc::Joystick control1{constants::CONTROL1};
+  frc::Joystick control2{constants::CONTROL2};
 
   void ConfigureButtonBindings();
 };
