@@ -42,7 +42,7 @@ void RobotContainer::ConfigureButtonBindings() {
   auto run_intake_roller = frc2::StartEndCommand(
     [this] {
 #ifdef USE_XBOX_CONTROLS
-      if(controller.GetRawButton(0)) {
+      if(controller.GetLeftBumper()) {
 #else
       if(control2.GetRawButton(10)) {
 #endif
@@ -73,14 +73,20 @@ void RobotContainer::ConfigureButtonBindings() {
   );
 
 #ifdef USE_XBOX_CONTROLS
-
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kX).ToggleWhenPressed(toggle_intake_arm);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kY).WhenHeld(run_intake_roller);
+  // D-pad - anything containing down
+  frc2::Trigger([this]{return controller.GetPOV() >= 135 && controller.GetPOV() <= 225;})
+      .WhileActiveOnce(reverse_outer_transport);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(shootCommand);
 #else
   frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
   frc2::JoystickButton(&control2, 1).WhenHeld(run_intake_roller);
   frc2::JoystickButton(&control2, 5).WhenHeld(reverse_outer_transport);
-  frc2::Trigger(auto_shift_condition).WhenActive(transport_inward_shift);
   frc2::JoystickButton(&control1, 1).WhenPressed(shootCommand);
 #endif
+  // controller independent triggers
+  frc2::Trigger(auto_shift_condition).WhenActive(transport_inward_shift);
 
   // TODO list
   // - enable outer belt while roller running until ball present - automatic behaviour or button?
