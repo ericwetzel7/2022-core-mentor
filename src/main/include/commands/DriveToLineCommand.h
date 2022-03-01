@@ -7,10 +7,11 @@
 
 class DriveToLineCommand : public frc2::CommandHelper<frc2::CommandBase, DriveToLineCommand> {
 public:
-    DriveToLineCommand(DriveSubsystem* system);
+    DriveToLineCommand(DriveSubsystem* system, bool forward);
 
     void Execute() override;
     bool IsFinished() override;
 private:
     DriveSubsystem* drive;
+    bool forward;
 };
