@@ -4,8 +4,14 @@
 
 #pragma once
 
+#include "Constants.h"
+
 #include <frc2/command/Command.h>
-#include <frc/Joystick.h>
+#ifdef USE_XBOX_CONTROLS
+  #include <frc/XboxController.h>
+#else
+  #include <frc/Joystick.h>
+#endif
 
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/DriveSubsytem.h"
@@ -31,9 +37,11 @@ private:
   IntakeSubsystem intakeSubsystem;
   ShooterSubsystem shooterSubsystem;
   TransportSubsystem transportSubsystem;
-
+#ifdef USE_XBOX_CONTROLS
+  frc::XboxController controller{constants::XBOX_CONTROL};
+#else
   frc::Joystick control1{constants::CONTROL1};
   frc::Joystick control2{constants::CONTROL2};
-
+#endif
   void ConfigureButtonBindings();
 };

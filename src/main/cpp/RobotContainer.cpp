@@ -21,7 +21,11 @@
 
 RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAlliance()) {
   // Initialize all of your commands and subsystems here
+#ifdef USE_XBOX_CONTROLS
+  driveSubsystem.SetDefaultCommand(DriveCommand(&driveSubsystem, &controller));
+#else
   driveSubsystem.SetDefaultCommand(DriveCommand(&driveSubsystem, &control1));
+#endif
   shooterSubsystem.SetDefaultCommand(FlywheelCommand(&shooterSubsystem));
 
   // Configure the button bindings
@@ -29,28 +33,56 @@ RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAll
 }
 
 void RobotContainer::ConfigureButtonBindings() {
-  // Configure your button bindings here
-  frc2::JoystickButton(&control2, 2).ToggleWhenPressed(frc2::StartEndCommand(
+  auto toggle_intake_arm = frc2::StartEndCommand(
     [this] {this->intakeSubsystem.extendArm();},
     [this] {this->intakeSubsystem.retractArm();},
     {&intakeSubsystem}
-  ));
-  
-  frc2::JoystickButton(&control2, 1).WhenHeld(frc2::StartEndCommand(
-    [this] {this->intakeSubsystem.startRoller();},
+  );
+
+  auto run_intake_roller = frc2::StartEndCommand(
+    [this] {
+#ifdef USE_XBOX_CONTROLS
+      if(controller.GetRawButton(0)) {
+#else
+      if(control2.GetRawButton(10)) {
+#endif
+        intakeSubsystem.reverseRoller();
+      } else {
+        intakeSubsystem.startRoller();
+      }
+    },
     [this] {this->intakeSubsystem.stopRoller();},
     {&intakeSubsystem}
-  ));
+  );
 
-  // frc2::Trigger()
-  frc2::Trigger([this]{
+  auto reverse_outer_transport = frc2::StartEndCommand(
+    [this] {transportSubsystem.reverseOuterBelt();},
+    [this] {transportSubsystem.disableOuterBelt();},
+    {&transportSubsystem}
+  );
+
+  auto auto_shift_condition = [this]{
     return transportSubsystem.hasOuterBall() && !transportSubsystem.hasInnerBall();
-  }).WhenActive(InwardShiftCommand(&transportSubsystem));
-
+  };
+  
+  auto transport_inward_shift = InwardShiftCommand(&transportSubsystem);
+  
   auto shootCommand = frc2::SequentialCommandGroup(
     frc2::InstantCommand([this]{transportSubsystem.enableInnerBelt();}, {&transportSubsystem}),
     frc2::WaitCommand(0.5_s)
   );
+
+#ifdef USE_XBOX_CONTROLS
+
+#else
+  frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
+  frc2::JoystickButton(&control2, 1).WhenHeld(run_intake_roller);
+  frc2::JoystickButton(&control2, 5).WhenHeld(reverse_outer_transport);
+  frc2::Trigger(auto_shift_condition).WhenActive(transport_inward_shift);
   frc2::JoystickButton(&control1, 1).WhenPressed(shootCommand);
+#endif
+
+  // TODO list
+  // - enable outer belt while roller running until ball present - automatic behaviour or button?
 }
 
