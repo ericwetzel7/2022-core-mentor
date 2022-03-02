@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
@@ -16,6 +16,6 @@ public:
     bool IsFinished();
 private:
     DriveSubsystem* drive;
-    std::function<bool(void)> condition;
     bool forward;
+    std::function<bool(void)> condition;
 };
