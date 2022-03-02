@@ -13,6 +13,7 @@
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/WaitUntilCommand.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/RunCommand.h>
 #include <frc2/command/button/Trigger.h>
 
 #include <units/time.h>
@@ -21,6 +22,7 @@
 #include "commands/FlywheelCommand.h"
 #include "commands/InwardShiftCommand.h"
 #include "commands/DriveToLineCommand.h"
+#include "commands/DriveUntilCommand.h"
 
 RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAlliance()), autocmd(nullptr) {
   // Initialize all of your commands and subsystems here
@@ -96,9 +98,9 @@ void RobotContainer::ConfigureButtonBindings() {
     frc2::InstantCommand([this]{climberSubsystem.retractLower();}),
     frc2::WaitUntilCommand([this]{return climberSubsystem.isRetracted();}),
     frc2::InstantCommand([this]{climberSubsystem.extendUpper();}),
-    frc2::WaitCommand(2.0_s),
+    frc2::WaitCommand(3.0_s),
     frc2::InstantCommand([this]{climberSubsystem.extendLower();}),
-    frc2::WaitCommand(1.0_s),
+    frc2::WaitCommand(3.0_s),
     frc2::InstantCommand([this]{climberSubsystem.retractLower();})
   );
   climb.AddRequirements(&climberSubsystem);
@@ -163,7 +165,12 @@ frc2::Command* RobotContainer::autonomousCommand() {
     frc2::InstantCommand([this] {
       transportSubsystem.disableInnerBelt();
       transportSubsystem.disableOuterBelt();
-    })
+    }),
+    frc2::RunCommand([this] {
+      driveSubsystem.drive(0, -0.5, 0);
+    }),
+    DriveUntilCommand(&driveSubsystem, false, [this]{return driveSubsystem.distance() > 72;})
+    // }).WithInterrupt([this] {return driveSubsystem.distance() > 72;})
   );
 
   return autocmd;  
