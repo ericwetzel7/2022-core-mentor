@@ -97,6 +97,7 @@ void RobotContainer::ConfigureButtonBindings() {
   auto climb = frc2::SequentialCommandGroup(
     frc2::InstantCommand([this]{climberSubsystem.retractLower();}),
     frc2::WaitUntilCommand([this]{return climberSubsystem.isRetracted();}),
+    frc2::WaitCommand(0.5_s),
     frc2::InstantCommand([this]{climberSubsystem.extendUpper();}),
     frc2::WaitCommand(3.0_s),
     frc2::InstantCommand([this]{climberSubsystem.extendLower();}),
@@ -165,9 +166,6 @@ frc2::Command* RobotContainer::autonomousCommand() {
     frc2::InstantCommand([this] {
       transportSubsystem.disableInnerBelt();
       transportSubsystem.disableOuterBelt();
-    }),
-    frc2::RunCommand([this] {
-      driveSubsystem.drive(0, -0.5, 0);
     }),
     DriveUntilCommand(&driveSubsystem, false, [this]{return driveSubsystem.distance() > 72;})
     // }).WithInterrupt([this] {return driveSubsystem.distance() > 72;})
