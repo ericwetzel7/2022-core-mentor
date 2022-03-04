@@ -61,5 +61,6 @@ double DriveSubsystem::orientation() {
 }
 
 bool DriveSubsystem::seesLine() {
-    return lineSensor.Get();
+    // return lineSensor.Get();
+    return true;
 }

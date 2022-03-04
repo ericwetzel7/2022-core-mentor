@@ -21,7 +21,8 @@ public:
     void toggleUpper(bool requireSafe = false);
 
 private:
-    frc::DigitalInput liftSwitch{constants::climber::LIFT_SWITCH};
+    frc::DigitalInput liftSwitchRight{constants::climber::LIFT_SWITCH_RIGHT};
+    frc::DigitalInput liftSwitchLeft{constants::climber::LIFT_SWITCH_LEFT};
 
     frc::DoubleSolenoid lowerArms{frc::PneumaticsModuleType::CTREPCM,
                                   constants::climber::LOWER_FORWARD_SOLENOID,

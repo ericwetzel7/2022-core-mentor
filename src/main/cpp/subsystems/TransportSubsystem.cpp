@@ -39,7 +39,8 @@ void TransportSubsystem::reverseInnerBelt(bool requireSafety) {
 }
 
 bool TransportSubsystem::hasOuterBall() {
-    return outerColorSensor.GetProximity() > 2000; // ?
+    // return outerColorSensor.GetProximity() > 2000; // ?
+    return outerBallSwitch.Get();
 }
 
 bool TransportSubsystem::hasInnerBall() {
@@ -47,7 +48,8 @@ bool TransportSubsystem::hasInnerBall() {
 }
 
 frc::Color TransportSubsystem::outerBallColor() {
-    return outerColorSensor.GetColor();
+    return frc::Color::kWhite;
+    // return outerColorSensor.GetColor();
 }
 
 bool TransportSubsystem::outerBallMatchesAlliance() {

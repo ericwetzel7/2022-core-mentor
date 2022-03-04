@@ -50,7 +50,7 @@ private:
 
     AHRS gyro{frc::SPI::Port::kMXP};    
 
-    frc::DigitalInput lineSensor{constants::drive::LINE_SENSOR};
+    // frc::DigitalInput lineSensor{constants::drive::LINE_SENSOR};
 
     // Basic functional iterator. Accumulation can be done by 
     // capturing the accumulator in a lambda.

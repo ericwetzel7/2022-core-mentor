@@ -13,11 +13,13 @@ namespace constants {
     constexpr int XBOX_CONTROL = 0;
 
     namespace drive {
-        constexpr int FRONT_LEFT_MOTOR = 0;
+        constexpr int FRONT_LEFT_MOTOR = 4;
         constexpr int REAR_LEFT_MOTOR = 1;
         constexpr int FRONT_RIGHT_MOTOR = 2;
         constexpr int REAR_RIGHT_MOTOR = 3;
-        constexpr int LINE_SENSOR = 0;
+        
+        constexpr int LINE_SENSOR_OUT = 0;
+        constexpr int LINE_SENSOR_IN = 1;
 
         constexpr int MOTOR_COUNT = 4;
 
@@ -37,7 +39,7 @@ namespace constants {
     }
 
     namespace shooter {
-        constexpr int SHOOTER_MOTOR = 0;
+        constexpr int SHOOTER_MOTOR = 8;
     
         constexpr double FLYWHEEL_RPM = 2700;
         namespace pid {
@@ -53,11 +55,13 @@ namespace constants {
         constexpr int UPPER_FORWARD_SOLENOID = 4;
         constexpr int UPPER_REVERSE_SOLENOID = 5;
 
-        constexpr int LIFT_SWITCH = 0;
+        constexpr int LIFT_SWITCH_RIGHT = 2;
+        constexpr int LIFT_SWITCH_LEFT = 5;
     }
 
     namespace transport {
-        constexpr int INNER_BALL_SWITCH = 0;
+        constexpr int INNER_BALL_SWITCH = 3;
+        constexpr int OUTER_BALL_SWITCH = 4;
         // constexpr int OUTER_COLOR_SENSOR = 0;
 
         constexpr int INNER_BELT_MOTOR = 0;
