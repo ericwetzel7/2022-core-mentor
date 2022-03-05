@@ -23,38 +23,38 @@ namespace constants {
 
         constexpr int MOTOR_COUNT = 4;
 
-        constexpr double DEFAULT_DEADBAND = 0.02;
+        constexpr double DEFAULT_DEADBAND = 0.1;
         constexpr double ROTATION_ADJUSTMENT_RATE = 0.05;
 
         constexpr double SELF_ROTATION_SPEED = 0.6;
     }
 
     namespace intake {
-        constexpr int FORWARD_SOLENOID = 0;
-        constexpr int REVERSE_SOLENOID = 1;
+        constexpr int FORWARD_SOLENOID = 3;//2;
+        constexpr int REVERSE_SOLENOID = 4;//5;
 
-        constexpr int ROLLER_MOTOR = 0;
+        constexpr int ROLLER_MOTOR = 5;
 
-        constexpr double DEFAULT_ROLLER_SPEED = 0.5;
+        constexpr double DEFAULT_ROLLER_SPEED = -0.5;
     }
 
     namespace shooter {
         constexpr int SHOOTER_MOTOR = 8;
     
-        constexpr double FLYWHEEL_RPM = -3800;
+        constexpr double FLYWHEEL_RPM = 3800;
         namespace pid {
-            constexpr double P = 5e-7;
-            constexpr double I = 1e-5;
+            constexpr double P = 7e-5;
+            constexpr double I = 5e-7;
             // constexpr double D = 0.01;
-            constexpr double FF = 7e-15;
+            constexpr double FF = 1e-5;
         }
     }
 
     namespace climber {
-        constexpr int LOWER_FORWARD_SOLENOID = 2;
-        constexpr int LOWER_REVERSE_SOLENOID = 3;
-        constexpr int UPPER_FORWARD_SOLENOID = 4;
-        constexpr int UPPER_REVERSE_SOLENOID = 5;
+        constexpr int LOWER_FORWARD_SOLENOID = 0;
+        constexpr int LOWER_REVERSE_SOLENOID = 7;
+        constexpr int UPPER_FORWARD_SOLENOID = 1;
+        constexpr int UPPER_REVERSE_SOLENOID = 6;
 
         constexpr int LIFT_SWITCH_RIGHT = 2;
         constexpr int LIFT_SWITCH_LEFT = 5;
@@ -65,10 +65,10 @@ namespace constants {
         constexpr int OUTER_BALL_SWITCH = 4;
         // constexpr int OUTER_COLOR_SENSOR = 0;
 
-        constexpr int INNER_BELT_MOTOR = 1;
-        constexpr int OUTER_BELT_MOTOR = 2;
+        constexpr int INNER_BELT_MOTOR = 6;
+        constexpr int OUTER_BELT_MOTOR = 7;
 
-        constexpr double INNER_BELT_SPEED = 0.5;
+        constexpr double INNER_BELT_SPEED = -0.5;
         constexpr double OUTER_BELT_SPEED = 0.5;
     }
 }

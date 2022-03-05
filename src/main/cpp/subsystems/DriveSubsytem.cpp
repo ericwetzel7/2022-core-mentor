@@ -10,8 +10,6 @@ DriveSubsystem::DriveSubsystem(double deadband, bool squareXInput, bool squareYI
         : deadband(deadband), squareX(squareXInput), squareY(squareYInput), squareRot(squareRotInput) {
     mecanumDrive.SetDeadband(deadband);
 
-    frontRight.SetInverted(true);
-    rearRight.SetInverted(true);
     resetDistance();
     resetGyro();
 }
@@ -19,18 +17,21 @@ DriveSubsystem::DriveSubsystem(double deadband, bool squareXInput, bool squareYI
 void DriveSubsystem::drive(double xSpeed, double ySpeed, double rotation, bool correctRotation) {
     xSpeed = pow(xSpeed, 1 + squareX * 0.5);
     ySpeed = pow(ySpeed, 1 + squareY * 0.5);
-    rotation = pow(rotation, 1 + squareRot * 0.5);
+    // rotation = pow(rotation, 1 + squareRot * 0.5);
+    mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
     if(rotation > deadband || rotation < -deadband) {
         // reset the gyro if rotating to help eliminate noise.
         gyro.Reset();
         mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
     } else {
-        // adjust rotation to compensate for hysteresis
-        // Get angle, shift to [-180,180), normalize
-        double rotOffset = (gyro.GetAngle() - (360 * (rotOffset >= 180))) / 180;
-        rotOffset *= constants::drive::ROTATION_ADJUSTMENT_RATE;
-        mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation + rotOffset);
+        mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
     }
+    //     // adjust rotation to compensate for hysteresis
+    //     // Get angle, shift to [-180,180), normalize
+    //     double rotOffset = (gyro.GetAngle() - (360 * (rotOffset >= 180))) / 180;
+    //     rotOffset *= constants::drive::ROTATION_ADJUSTMENT_RATE;
+    //     mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation + rotOffset);
+    // }
 }
 
 void DriveSubsystem::freeTurn(double speed) {

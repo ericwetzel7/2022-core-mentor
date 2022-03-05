@@ -36,7 +36,7 @@ private:
   DriveSubsystem driveSubsystem;
   ClimberSubsystem climberSubsystem;
   IntakeSubsystem intakeSubsystem;
-  ShooterSubsystem shooterSubsystem;
+  // ShooterSubsystem shooterSubsystem;
   TransportSubsystem transportSubsystem;
 #ifdef USE_XBOX_CONTROLS
   frc::XboxController controller{constants::XBOX_CONTROL};
