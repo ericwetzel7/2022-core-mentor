@@ -12,6 +12,7 @@
 #else
   #include <frc/Joystick.h>
 #endif
+#include <frc/Timer.h>
 
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/DriveSubsytem.h"
@@ -33,10 +34,10 @@ public:
   frc2::Command* autonomousCommand();
 private:
   // The robot's subsystems and commands are defined here...
-  DriveSubsystem driveSubsystem;
+  // DriveSubsystem driveSubsystem;
   ClimberSubsystem climberSubsystem;
   IntakeSubsystem intakeSubsystem;
-  // ShooterSubsystem shooterSubsystem;
+  ShooterSubsystem shooterSubsystem;
   TransportSubsystem transportSubsystem;
 #ifdef USE_XBOX_CONTROLS
   frc::XboxController controller{constants::XBOX_CONTROL};
@@ -44,6 +45,9 @@ private:
   frc::Joystick control1{constants::CONTROL1};
   frc::Joystick control2{constants::CONTROL2};
 #endif
+
+  frc::Timer outerTimer;
+  frc::Timer innerTimer;
   void ConfigureButtonBindings();
 
   frc2::Command* autocmd;

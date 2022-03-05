@@ -1,4 +1,5 @@
 #include "subsystems/ClimberSubsystem.h"
+#include <iostream>
 
 ClimberSubsystem::ClimberSubsystem() {
     upperFired = false;
@@ -19,7 +20,10 @@ void ClimberSubsystem::toggleLower() {
 }
 
 bool ClimberSubsystem::isRetracted() {
-    return liftSwitchRight.Get() && liftSwitchLeft.Get();
+    std::cout << "right:" << liftSwitchRight.Get() << std::endl;
+    std::cout << "left: "<< liftSwitchLeft.Get() << std::endl;
+    return !liftSwitchLeft.Get();
+    // return liftSwitchRight.Get() && liftSwitchLeft.Get();
 }
 
 void ClimberSubsystem::extendUpper(bool requireSafe) {

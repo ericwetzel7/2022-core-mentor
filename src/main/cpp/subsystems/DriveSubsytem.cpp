@@ -15,10 +15,9 @@ DriveSubsystem::DriveSubsystem(double deadband, bool squareXInput, bool squareYI
 }
 
 void DriveSubsystem::drive(double xSpeed, double ySpeed, double rotation, bool correctRotation) {
-    xSpeed = pow(xSpeed, 1 + squareX * 0.5);
-    ySpeed = pow(ySpeed, 1 + squareY * 0.5);
+    // xSpeed = pow(xSpeed, 1 + squareX * 0.5);
+    // ySpeed = pow(ySpeed, 1 + squareY * 0.5);
     // rotation = pow(rotation, 1 + squareRot * 0.5);
-    mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
     if(rotation > deadband || rotation < -deadband) {
         // reset the gyro if rotating to help eliminate noise.
         gyro.Reset();
