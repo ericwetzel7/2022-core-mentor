@@ -14,13 +14,14 @@
 #include <frc2/command/WaitUntilCommand.h>
 #include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/button/Trigger.h>
 
 #include <units/time.h>
 
 #include "commands/DriveCommand.h"
 #include "commands/FlywheelCommand.h"
-#include "commands/InwardShiftCommand.h"
+// #include "commands/InwardShiftCommand.h"
 #include "commands/DriveToLineCommand.h"
 #include "commands/DriveUntilCommand.h"
 
@@ -32,6 +33,19 @@ RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAll
   driveSubsystem.SetDefaultCommand(DriveCommand(&driveSubsystem, &control1));
 #endif
   shooterSubsystem.SetDefaultCommand(FlywheelCommand(&shooterSubsystem));
+
+  transportSubsystem.SetDefaultCommand(frc2::RunCommand([this] {
+    if(!transportSubsystem.hasOuterBall() || !transportSubsystem.hasInnerBall()) {
+      transportSubsystem.enableOuterBelt();
+    } else {
+      transportSubsystem.disableOuterBelt();
+    }
+    if(!transportSubsystem.hasInnerBall()) {
+      transportSubsystem.enableInnerBelt();
+    } else {
+      transportSubsystem.disableInnerBelt();
+    }
+  }, {&transportSubsystem}));
 
   // Configure the button bindings
   ConfigureButtonBindings();
@@ -70,12 +84,12 @@ void RobotContainer::ConfigureButtonBindings() {
     {&transportSubsystem}
   );
 
-  auto auto_shift_condition = [this]{
-    // return transportSubsystem.hasOuterBall() && !transportSubsystem.hasInnerBall();
-    return !transportSubsystem.hasInnerBall();
-  };
-  // Shifts balls from outer position to inner position  
-  auto transport_inward_shift = InwardShiftCommand(&transportSubsystem);
+  // auto auto_shift_condition = [this]{
+  //   // return transportSubsystem.hasOuterBall() && !transportSubsystem.hasInnerBall();
+  //   return !transportSubsystem.hasInnerBall();
+  // };
+  // // Shifts balls from outer position to inner position  
+  // auto transport_inward_shift = InwardShiftCommand(&transportSubsystem);
 
   // Runs the outer belt until it has a ball in place.
   auto transport_outer_load = frc2::FunctionalCommand(
@@ -88,8 +102,8 @@ void RobotContainer::ConfigureButtonBindings() {
 
   auto toggle_lower_arms = frc2::InstantCommand([this]{climberSubsystem.toggleLower();});
   auto upper_arms_release = frc2::StartEndCommand(
-    [this]{climberSubsystem.extendUpper();},
-    [this]{climberSubsystem.retractUpper();},
+    [this]{climberSubsystem.extendUpper(false);},
+    [this]{climberSubsystem.retractUpper(false);},
     {&climberSubsystem}
   );
 
@@ -108,9 +122,12 @@ void RobotContainer::ConfigureButtonBindings() {
 
   // Shifts a ball from the inner position to the shooter.
   auto shootCommand = frc2::SequentialCommandGroup(
-    frc2::InstantCommand([this]{transportSubsystem.enableInnerBelt();}),
-    frc2::WaitCommand(0.5_s)
-  );
+    frc2::InstantCommand([this]{
+      transportSubsystem.enableInnerBelt();
+      transportSubsystem.enableOuterBelt();
+    }),
+    frc2::WaitUntilCommand([this] {return transportSubsystem.hasInnerBall();})
+  ).WithTimeout(2.0_s);
   shootCommand.AddRequirements(&transportSubsystem);
 
   // Both sets of bindings have equivalant capabilities. 
@@ -125,18 +142,19 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::Trigger([this]{return controller.GetPOV() == 180;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, false));
   // D-pad down - drive forwards to line
   frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
-  frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhenPressed(&shootCommand);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhileHeld(&shootCommand);
   frc2::JoystickButton(&controller, frc::XboxController::Button::kStart).WhenPressed(&climb);
   
-  frc2::JoystickButton(&controller, frc::XboxController::Button::kA).WhenPressed(toggle_lower_arms);
-  frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
-    frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper).ToggleWhenActive(upper_arms_release);
+  (frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
+    !frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).WhenPressed(toggle_lower_arms);
+  (frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
+    frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).ToggleWhenActive(upper_arms_release);
 #else
   // Button bindings for Joysticks.
   frc2::JoystickButton(&control2, 2).ToggleWhenPressed(toggle_intake_arm);
   frc2::JoystickButton(&control2, 1).WhenHeld(run_intake_roller);
   frc2::JoystickButton(&control2, 5).WhenHeld(reverse_outer_transport);
-  frc2::JoystickButton(&control1, 1).WhenPressed(&shootCommand);
+  frc2::JoystickButton(&control1, 1).WhileHeld(&shootCommand);
   // drive backwards to line
   frc2::JoystickButton(&control1, 10).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
   // drive forwards to line
@@ -146,11 +164,11 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&control2, 6).WhenPressed(toggle_lower_arms);
   frc2::JoystickButton(&control2, 5).ToggleWhenPressed(upper_arms_release);
 #endif
-  // controller independent triggers
+  // controller independent triggers - changed to the default behaviour for the transport subsystem (and simplified)
   // shift outer balls inward until there is an inner ball
-  frc2::Trigger(auto_shift_condition).WhenActive(transport_inward_shift);
+  // frc2::Trigger(auto_shift_condition).WhenActive(transport_inward_shift);
   // run outer belt until there is an outer ball.
-  frc2::Trigger([this] {return !transportSubsystem.hasOuterBall();}).WhenActive(transport_outer_load);
+  // frc2::Trigger([this] {return !transportSubsystem.hasOuterBall();}).WhenActive(transport_outer_load);
   
   // TODO list
 }
@@ -160,13 +178,13 @@ frc2::Command* RobotContainer::autonomousCommand() {
     DriveToLineCommand(&driveSubsystem, false),
     frc2::InstantCommand([this] {
       transportSubsystem.enableInnerBelt();
-      transportSubsystem.enableOuterBelt();
+      // transportSubsystem.enableOuterBelt();
     }),
-    frc2::WaitCommand(5.0_s),
-    frc2::InstantCommand([this] {
-      transportSubsystem.disableInnerBelt();
-      transportSubsystem.disableOuterBelt();
-    }),
+    // frc2::WaitCommand(5.0_s),
+    // frc2::InstantCommand([this] {
+    //   transportSubsystem.disableInnerBelt();
+    //   transportSubsystem.disableOuterBelt();
+    // }),
     DriveUntilCommand(&driveSubsystem, false, [this]{return driveSubsystem.distance() > 72;})
     // }).WithInterrupt([this] {return driveSubsystem.distance() > 72;})
   );
