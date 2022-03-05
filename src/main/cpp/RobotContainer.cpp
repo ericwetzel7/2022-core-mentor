@@ -124,27 +124,27 @@ void RobotContainer::ConfigureButtonBindings() {
   ).WithTimeout(2.0_s);
   shootCommand.AddRequirements(&transportSubsystem);
 
-//   // Both sets of bindings have equivalant capabilities. 
-//   // The only difference is which control scheme is being used.
-// #ifdef USE_XBOX_CONTROLS
-//   // Button bindings for Xbox Controller
-//   frc2::JoystickButton(&controller, frc::XboxController::Button::kX).ToggleWhenPressed(toggle_intake_arm);
-//   frc2::JoystickButton(&controller, frc::XboxController::Button::kY).WhenHeld(run_intake_roller);
-//   // D-pad left
-//   frc2::Trigger([this]{return controller.GetPOV() == 270;}).WhileActiveOnce(reverse_outer_transport);
-//   // D-pad down - drive backwards to line
-//   frc2::Trigger([this]{return controller.GetPOV() == 180;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, false));
-//   // D-pad down - drive forwards to line
-//   frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
-//   frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhileHeld(&shootCommand);
-//   frc2::JoystickButton(&controller, frc::XboxController::Button::kStart).WhenPressed(&climb);
+  // Both sets of bindings have equivalant capabilities. 
+  // The only difference is which control scheme is being used.
+#ifdef USE_XBOX_CONTROLS
+  // Button bindings for Xbox Controller
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kX).ToggleWhenPressed(toggle_intake_arm);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kY).WhenHeld(run_intake_roller);
+  // D-pad left
+  frc2::Trigger([this]{return controller.GetPOV() == 270;}).WhileActiveOnce(reverse_outer_transport);
+  // D-pad down - drive backwards to line
+  frc2::Trigger([this]{return controller.GetPOV() == 180;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, false));
+  // D-pad down - drive forwards to line
+  frc2::Trigger([this]{return controller.GetPOV() == 0;}).ToggleWhenActive(DriveToLineCommand(&driveSubsystem, true));
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kB).WhileHeld(&shootCommand);
+  frc2::JoystickButton(&controller, frc::XboxController::Button::kStart).WhenPressed(&climb);
   
-//   (frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
-//     !frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).WhenPressed(toggle_lower_arms);
-//   (frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
-//     frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).ToggleWhenActive(upper_arms_release);
-// #else
-//   // Button bindings for Joysticks.
+  (frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
+    !frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).WhenPressed(toggle_lower_arms);
+  (frc2::JoystickButton(&controller, frc::XboxController::Button::kA) && 
+    frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).ToggleWhenActive(upper_arms_release);
+#else
+  // Button bindings for Joysticks.
   frc2::JoystickButton(&control2, 1).WhenPressed(toggle_intake_arm);
   frc2::JoystickButton(&control2, 2).WhenHeld(run_intake_roller);
   frc2::JoystickButton(&control2, 4).WhenHeld(reverse_outer_transport);
@@ -158,9 +158,9 @@ void RobotContainer::ConfigureButtonBindings() {
 
   frc2::JoystickButton(&control2, 6).WhenPressed(toggle_lower_arms);
   frc2::JoystickButton(&control2, 5).ToggleWhenPressed(upper_arms_release);
-// #endif
+#endif
   
-//   // TODO list
+  // TODO list
 }
 
 frc2::Command* RobotContainer::autonomousCommand() {
