@@ -41,11 +41,12 @@ namespace constants {
     namespace shooter {
         constexpr int SHOOTER_MOTOR = 8;
     
-        constexpr double FLYWHEEL_RPM = 2700;
+        constexpr double FLYWHEEL_RPM = -3800;
         namespace pid {
-            constexpr double P = 0.01;
-            constexpr double I = 0.01;
-            constexpr double D = 0.01;
+            constexpr double P = 5e-7;
+            constexpr double I = 1e-5;
+            // constexpr double D = 0.01;
+            constexpr double FF = 7e-15;
         }
     }
 
@@ -64,8 +65,8 @@ namespace constants {
         constexpr int OUTER_BALL_SWITCH = 4;
         // constexpr int OUTER_COLOR_SENSOR = 0;
 
-        constexpr int INNER_BELT_MOTOR = 0;
-        constexpr int OUTER_BELT_MOTOR = 1;
+        constexpr int INNER_BELT_MOTOR = 1;
+        constexpr int OUTER_BELT_MOTOR = 2;
 
         constexpr double INNER_BELT_SPEED = 0.5;
         constexpr double OUTER_BELT_SPEED = 0.5;

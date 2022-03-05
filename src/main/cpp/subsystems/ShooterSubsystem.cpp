@@ -7,7 +7,8 @@ ShooterSubsystem::ShooterSubsystem(double rpm) :flywheelRPM(rpm) {
                              rev::CANSparkMax::ControlType::kVelocity);
     flywheelPID.SetP(constants::shooter::pid::P);
     flywheelPID.SetI(constants::shooter::pid::I);
-    flywheelPID.SetD(constants::shooter::pid::D);
+    flywheelPID.SetFF(constants::shooter::pid::FF);
+    // flywheelPID.SetD(constants::shooter::pid::D);
 }
 
 void ShooterSubsystem::enableFlywheel() {

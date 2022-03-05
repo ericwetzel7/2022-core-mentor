@@ -32,5 +32,6 @@ private:
                             constants::intake::FORWARD_SOLENOID,
                             constants::intake::REVERSE_SOLENOID};
 
-    WPI_TalonSRX roller{constants::intake::ROLLER_MOTOR};
+    ctre::phoenix::motorcontrol::can::WPI_VictorSPX roller{constants::intake::ROLLER_MOTOR};
+    // WPI_TalonSRX roller{constants::intake::ROLLER_MOTOR};
 };

@@ -10,7 +10,7 @@
 #include <frc/DriverStation.h>
 #include <frc/util/Color.h>
 
-using ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
+using ctre::phoenix::motorcontrol::can::WPI_VictorSPX;
 
 
 class TransportSubsystem : public frc2::SubsystemBase {
@@ -46,8 +46,8 @@ private:
     frc::DigitalInput outerBallSwitch{constants::transport::OUTER_BALL_SWITCH};
     // rev::ColorSensorV3 outerColorSensor{frc::I2C::Port::kMXP};
 
-    WPI_TalonSRX innerBelt{constants::transport::INNER_BELT_MOTOR};
-    WPI_TalonSRX outerBelt{constants::transport::OUTER_BELT_MOTOR};
+    WPI_VictorSPX innerBelt{constants::transport::INNER_BELT_MOTOR};
+    WPI_VictorSPX outerBelt{constants::transport::OUTER_BELT_MOTOR};
 
     RGB dominantColor(frc::Color color);
 };
