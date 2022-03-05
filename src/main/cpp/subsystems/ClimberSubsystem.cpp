@@ -1,6 +1,7 @@
 #include "subsystems/ClimberSubsystem.h"
 
 ClimberSubsystem::ClimberSubsystem() {
+    upperFired = false;
     retractLower();
     retractUpper();
 }
@@ -24,6 +25,7 @@ bool ClimberSubsystem::isRetracted() {
 void ClimberSubsystem::extendUpper(bool requireSafe) {
     if(requireSafe && !isRetracted()) return;
     upperArms.Set(frc::DoubleSolenoid::Value::kForward);
+    upperFired = true;
 }
 
 void ClimberSubsystem::retractUpper(bool requireSafe) {
@@ -34,4 +36,13 @@ void ClimberSubsystem::retractUpper(bool requireSafe) {
 void ClimberSubsystem::toggleUpper(bool requireSafe) {
     if(requireSafe && !isRetracted()) return;
     upperArms.Toggle();
+    upperFired = true;
+}
+
+bool ClimberSubsystem::isUpperFired() {
+    return upperFired;
+}
+
+void ClimberSubsystem::resetFiring() {
+    upperFired = false;
 }

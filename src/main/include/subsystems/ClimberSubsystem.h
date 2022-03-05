@@ -20,7 +20,11 @@ public:
     void retractUpper(bool requireSafe = false);
     void toggleUpper(bool requireSafe = false);
 
+    bool isUpperFired();
+    void resetFiring();
 private:
+    bool upperFired;
+
     frc::DigitalInput liftSwitchRight{constants::climber::LIFT_SWITCH_RIGHT};
     frc::DigitalInput liftSwitchLeft{constants::climber::LIFT_SWITCH_LEFT};
 
