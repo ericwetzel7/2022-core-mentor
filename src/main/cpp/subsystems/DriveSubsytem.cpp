@@ -10,14 +10,23 @@ DriveSubsystem::DriveSubsystem(double deadband, bool squareXInput, bool squareYI
         : deadband(deadband), squareX(squareXInput), squareY(squareYInput), squareRot(squareRotInput) {
     mecanumDrive.SetDeadband(deadband);
 
+    frontRight.SetInverted(true);
+    rearRight.SetInverted(true);
+
     resetDistance();
     resetGyro();
 }
 
 void DriveSubsystem::drive(double xSpeed, double ySpeed, double rotation, bool correctRotation) {
-    // xSpeed = pow(xSpeed, 1 + squareX * 0.5);
-    // ySpeed = pow(ySpeed, 1 + squareY * 0.5);
-    // rotation = pow(rotation, 1 + squareRot * 0.5);
+    if(squareX) {
+        xSpeed = abs(xSpeed) * xSpeed;
+    }
+    if(squareY) {
+        ySpeed = abs(ySpeed) * ySpeed;
+    }
+    if(squareRot) {
+        rotation = abs(rotation) * rotation;
+    }
     if(rotation > deadband || rotation < -deadband) {
         // reset the gyro if rotating to help eliminate noise.
         gyro.Reset();
