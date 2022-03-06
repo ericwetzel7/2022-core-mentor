@@ -71,8 +71,24 @@ void RobotContainer::ConfigureButtonBindings() {
 
   // Run the intake roller. Run it in reverse if button 10 pressed on Joystick, 
   // or left bumper pressed on Xbox controller.
-  auto run_intake_roller = frc2::StartEndCommand(
-    [this] {
+//   auto run_intake_roller = frc2::StartEndCommand(
+//     [this] {
+// #ifdef USE_XBOX_CONTROLS
+//       if(controller.GetLeftBumper()) {
+// #else
+//       if(control2.GetRawButton(10)) {
+// #endif
+//         intakeSubsystem.reverseRoller();
+//       } else {
+//         intakeSubsystem.startRoller();
+//       }
+//     },
+//     [this] {this->intakeSubsystem.stopRoller();},
+//     {&intakeSubsystem}
+//   );
+  auto run_intake_roller = frc2::FunctionalCommand(
+    []{},
+    [this]{
 #ifdef USE_XBOX_CONTROLS
       if(controller.GetLeftBumper()) {
 #else
@@ -83,14 +99,20 @@ void RobotContainer::ConfigureButtonBindings() {
         intakeSubsystem.startRoller();
       }
     },
-    [this] {this->intakeSubsystem.stopRoller();},
-    {&intakeSubsystem}
+    [this](bool){intakeSubsystem.stopRoller();},
+    []{return false;}
   );
 
   // Runs the outer transport belt in reverse
-  auto reverse_outer_transport = frc2::StartEndCommand(
-    [this] {transportSubsystem.reverseOuterBelt();},
-    [this] {transportSubsystem.disableOuterBelt();},
+  auto reverse_transport = frc2::StartEndCommand(
+    [this] {
+      transportSubsystem.reverseOuterBelt();
+      transportSubsystem.reverseInnerBelt();
+    },
+    [this] {
+      transportSubsystem.disableOuterBelt();
+      transportSubsystem.disableInnerBelt();
+    },
     {&transportSubsystem}
   );
 
@@ -159,16 +181,19 @@ void RobotContainer::ConfigureButtonBindings() {
     frc2::JoystickButton(&controller, frc::XboxController::Button::kRightBumper)).ToggleWhenActive(upper_arms_release);
 #else
   // Button bindings for Joysticks.
-  frc2::JoystickButton(&control2, 1).WhenPressed(toggle_intake_arm);
-  frc2::JoystickButton(&control2, 2).WhenHeld(run_intake_roller);
-  frc2::JoystickButton(&control2, 4).WhenHeld(reverse_outer_transport);
+  // Joystick 1 - not including driving
   frc2::JoystickButton(&control1, 1).WhileHeld(&shootCommand);
-//   // drive backwards to line
-//   frc2::JoystickButton(&control1, 10).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
-//   // drive forwards to line
-//   frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
+  // drive backwards to line
+  // frc2::JoystickButton(&control1, 10).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
+  // drive forwards to line
+  // frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
+
+  // Joystick 2
+  frc2::JoystickButton(&control2, 1).WhenPressed(toggle_intake_arm);
+  frc2::JoystickButton(&control2, 2).WhenHeld(run_intake_roller); // inverts on 10 pressed
+  frc2::JoystickButton(&control2, 4).WhenHeld(reverse_transport);
   frc2::JoystickButton(&control2, 8).WhenPressed(&climb);
-  frc2::JoystickButton(&control2, 7).WhenPressed(frc2::InstantCommand([this]{climberSubsystem.isRetracted();}));
+  // frc2::JoystickButton(&control2, 7).WhenPressed(frc2::InstantCommand([this]{climberSubsystem.isRetracted();}));
 
   frc2::JoystickButton(&control2, 6).WhenPressed(toggle_lower_arms);
   frc2::JoystickButton(&control2, 5).ToggleWhenPressed(upper_arms_release);
