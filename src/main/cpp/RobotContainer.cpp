@@ -103,8 +103,14 @@ void RobotContainer::ConfigureButtonBindings() {
 
 //   // Performs the climbing procedure. Robot in permanent altered state for rest of game.
   auto climb = frc2::SequentialCommandGroup(
-    frc2::InstantCommand([this]{climberSubsystem.retractLower();}),
-    frc2::WaitUntilCommand([this]{return climberSubsystem.isRetracted();}),
+    frc2::FunctionalCommand(
+      [this]{climberSubsystem.retractLower();},
+      []{},
+      [](bool){},
+      [this]{return climberSubsystem.isRetracted();}
+    ),
+    // frc2::InstantCommand([this]{climberSubsystem.retractLower();}),
+    // frc2::WaitUntilCommand([this]{return climberSubsystem.isRetracted();}),
     frc2::WaitCommand(0.5_s),
     frc2::InstantCommand([this]{climberSubsystem.extendUpper();}),
     frc2::WaitCommand(3.0_s),
@@ -115,13 +121,21 @@ void RobotContainer::ConfigureButtonBindings() {
   climb.AddRequirements(&climberSubsystem);
 
   // Shifts a ball from the inner position to the shooter.
-  auto shootCommand = frc2::SequentialCommandGroup(
-    frc2::InstantCommand([this]{
-      transportSubsystem.enableInnerBelt();
-      transportSubsystem.enableOuterBelt();
-    }),
-    frc2::WaitUntilCommand([this] {return transportSubsystem.hasInnerBall();})
-  ).WithTimeout(2.0_s);
+  // auto shootCommand = frc2::SequentialCommandGroup(
+  //   frc2::InstantCommand([this]{
+  //     transportSubsystem.enableInnerBelt();
+  //     transportSubsystem.enableOuterBelt();
+  //   }),
+  //   frc2::WaitUntilCommand([this] {return transportSubsystem.hasInnerBall();})
+  // ).WithTimeout(2.0_s);
+  auto shootCommand = frc2::FunctionalCommand(
+    [this]{transportSubsystem.enableInnerBelt();
+           transportSubsystem.enableOuterBelt();},
+    []{},
+    [this](bool){transportSubsystem.disableInnerBelt();
+                 transportSubsystem.disableOuterBelt();},
+    [this]{return transportSubsystem.hasInnerBall();}
+  ).WithTimeout(5.0_s);
   shootCommand.AddRequirements(&transportSubsystem);
 
   // Both sets of bindings have equivalant capabilities. 
