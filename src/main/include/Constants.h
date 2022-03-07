@@ -18,14 +18,14 @@ namespace constants {
         constexpr int FRONT_RIGHT_MOTOR = 2;
         constexpr int REAR_RIGHT_MOTOR = 3;
         
-        constexpr int LINE_SENSOR_OUT = 0;
-        constexpr int LINE_SENSOR_IN = 1;
+        constexpr int LINE_SENSOR = 0;
 
         constexpr int MOTOR_COUNT = 4;
 
-        constexpr double DEFAULT_DEADBAND = 0.1;
+        constexpr double DEFAULT_DEADBAND = 0.15;
         constexpr double ROTATION_ADJUSTMENT_RATE = 0.05;
 
+        constexpr double ROTARTION_REDUCTION = 0.6;
         constexpr double SELF_ROTATION_SPEED = 0.6;
     }
 
@@ -53,8 +53,8 @@ namespace constants {
     namespace climber {
         constexpr int LOWER_FORWARD_SOLENOID = 0;
         constexpr int LOWER_REVERSE_SOLENOID = 7;
-        constexpr int UPPER_FORWARD_SOLENOID = 1;
-        constexpr int UPPER_REVERSE_SOLENOID = 6;
+        constexpr int UPPER_FORWARD_SOLENOID = 6;
+        constexpr int UPPER_REVERSE_SOLENOID = 1;
 
         constexpr int LIFT_SWITCH_RIGHT = 2;
         constexpr int LIFT_SWITCH_LEFT = 5;
