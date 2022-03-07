@@ -28,8 +28,7 @@ void IntakeSubsystem::stopRoller() {
 }
 
 void IntakeSubsystem::reverseRoller() {
-    rollerSpeed = -rollerSpeed;
-    startRoller();
+    roller.Set(-rollerSpeed);
 }
 
 void IntakeSubsystem::resetRollerSpeed() {
