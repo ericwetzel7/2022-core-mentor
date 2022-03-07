@@ -16,6 +16,7 @@
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/ConditionalCommand.h>
+#include <frc2/command/PrintCommand.h>
 #include <frc2/command/button/Trigger.h>
 
 #include <units/time.h>
@@ -137,6 +138,12 @@ void RobotContainer::ConfigureButtonBindings() {
   // frc2::JoystickButton(&control1, 9).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
   // drive backwards to line
   // frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
+  // disable/re-enable shooter
+  frc2::JoystickButton(&control1, 7).ToggleWhenPressed(frc2::StartEndCommand(
+    [this]{shooterSubsystem.disableFlywheel();},
+    [this]{shooterSubsystem.enableFlywheel();},
+    {&shooterSubsystem}
+  ));
 
   // Joystick 2
   frc2::JoystickButton(&control2, 1).WhenPressed(toggle_intake_arm);
@@ -167,10 +174,13 @@ void RobotContainer::ConfigureButtonBindings() {
     [this]{return !climberSubsystem.isRetracted();}
   ));
 
+  frc2::JoystickButton(&control2, 7).WhenPressed(frc2::InstantCommand([this] {climberSubsystem.isRetracted();}));
+
   frc2::JoystickButton(&control2, 6).WhenPressed(toggle_lower_arms);
   frc2::JoystickButton(&control2, 5).ToggleWhenPressed(upper_arms_release);
 #endif
   
+  frc2::Trigger([this]{return driveSubsystem.seesLine();}).WhenActive(frc2::PrintCommand("I see the line!"));
   // TODO list
 }
 
