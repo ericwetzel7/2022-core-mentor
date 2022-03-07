@@ -34,7 +34,7 @@ public:
   frc2::Command* autonomousCommand();
 private:
   // The robot's subsystems and commands are defined here...
-  // DriveSubsystem driveSubsystem;
+  DriveSubsystem driveSubsystem;
   ClimberSubsystem climberSubsystem;
   IntakeSubsystem intakeSubsystem;
   ShooterSubsystem shooterSubsystem;
