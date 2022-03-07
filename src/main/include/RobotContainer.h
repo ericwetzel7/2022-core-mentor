@@ -46,7 +46,6 @@ private:
   frc::Joystick control2{constants::CONTROL2};
 #endif
 
-  frc::Timer outerTimer;
   frc::Timer innerTimer;
   void ConfigureButtonBindings();
 

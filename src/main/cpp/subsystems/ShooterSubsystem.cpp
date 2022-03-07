@@ -8,7 +8,6 @@ ShooterSubsystem::ShooterSubsystem(double rpm) :flywheelRPM(rpm) {
     flywheelPID.SetFF(constants::shooter::pid::FF);
     // flywheelPID.SetD(constants::shooter::pid::D);
     disableFlywheel();
-    // flywheel.SetInverted(true);
 }
 
 void ShooterSubsystem::enableFlywheel() {
