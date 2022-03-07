@@ -4,6 +4,10 @@
 
 TransportSubsystem::TransportSubsystem(frc::DriverStation::Alliance alliance) {
     changeAlliance(alliance);
+    // Shooting doesn't seem to work at all if preloaded with balls. 
+    // These 2 lines seem to fix it. I don't know why.
+    disableInnerBelt();
+    disableOuterBelt();
 }
 
 void TransportSubsystem::changeAlliance(frc::DriverStation::Alliance alliance) {
