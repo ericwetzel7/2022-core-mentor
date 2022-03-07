@@ -1,6 +1,7 @@
 #include "subsystems/DriveSubsytem.h"
 
 #include <cmath>
+#include <frc/MathUtil.h>
 
 DriveSubsystem::DriveSubsystem() : DriveSubsystem(constants::drive::DEFAULT_DEADBAND) {}
 
@@ -27,19 +28,23 @@ void DriveSubsystem::drive(double xSpeed, double ySpeed, double rotation, bool c
     if(squareRot) {
         rotation = abs(rotation) * rotation;
     }
+    // mecanum drive does not inerently apply deadband to rotation
+    if(rotation < deadband) {
+        frc::ApplyDeadband(rotation, deadband);
+    }
     if(rotation > deadband || rotation < -deadband) {
         // reset the gyro if rotating to help eliminate noise.
         gyro.Reset();
-        mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
+        mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation * constants::drive::ROTARTION_REDUCTION);
     } else {
-        mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
-    }
-    //     // adjust rotation to compensate for hysteresis
-    //     // Get angle, shift to [-180,180), normalize
-    //     double rotOffset = (gyro.GetAngle() - (360 * (rotOffset >= 180))) / 180;
-    //     rotOffset *= constants::drive::ROTATION_ADJUSTMENT_RATE;
-    //     mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation + rotOffset);
+    //     mecanumDrive.DriveCartesian(ySpeed, xSpeed, rotation);
     // }
+        // adjust rotation to compensate for hysteresis
+        // Get angle, shift to [-180,180), normalize
+        double rotOffset = (gyro.GetAngle() - (360 * (gyro.GetAngle() >= 180))) / 180;
+        rotOffset *= -constants::drive::ROTATION_ADJUSTMENT_RATE;
+        mecanumDrive.DriveCartesian(ySpeed, xSpeed, fmin(rotation + rotOffset, 1));
+    }
 }
 
 void DriveSubsystem::freeTurn(double speed) {
@@ -70,6 +75,6 @@ double DriveSubsystem::orientation() {
 }
 
 bool DriveSubsystem::seesLine() {
-    // return lineSensor.Get();
-    return true;
+    return lineSensor.Get();
+    // return true;
 }
