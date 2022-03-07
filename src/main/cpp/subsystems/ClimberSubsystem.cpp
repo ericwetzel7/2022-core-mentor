@@ -4,7 +4,7 @@
 ClimberSubsystem::ClimberSubsystem() {
     upperFired = false;
     retractLower();
-    extendUpper();
+    retractUpper();
 }
 
 void ClimberSubsystem::extendLower() {
