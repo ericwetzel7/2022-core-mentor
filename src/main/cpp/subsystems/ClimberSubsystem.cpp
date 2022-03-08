@@ -22,7 +22,7 @@ void ClimberSubsystem::toggleLower() {
 bool ClimberSubsystem::isRetracted() {
     std::cout << "right:" << liftSwitchRight.Get() << std::endl;
     std::cout << "left: "<< liftSwitchLeft.Get() << std::endl;
-    return !liftSwitchLeft.Get();
+    return !liftSwitchLeft.Get(); //&& !liftSwitchRight.Get();
     // return liftSwitchRight.Get() && liftSwitchLeft.Get();
 }
 

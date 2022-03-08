@@ -40,12 +40,13 @@ namespace constants {
 
     namespace shooter {
         constexpr int SHOOTER_MOTOR = 8;
-    
-        constexpr double FLYWHEEL_RPM = 3800;
+
+        // original: 3800
+        constexpr double FLYWHEEL_RPM = 3600;
         namespace pid {
             constexpr double P = 7e-5;
             constexpr double I = 5e-7;
-            // constexpr double D = 0.01;
+            // constexpr double D = 0.01; // not using
             constexpr double FF = 1e-5;
         }
     }
