@@ -29,17 +29,7 @@
 #include <cstdio>
 
 RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAlliance()) {
-  // Initialize all of your commands and subsystems here
-  // autocmd = frc2::SequentialCommandGroup(
-  //     DriveToLineCommand(&driveSubsystem, false),
-  //     frc2::InstantCommand([this]{driveSubsystem.resetDistance();}),
-  //     DriveUntilCommand(&driveSubsystem, false, [this] {
-  //       return driveSubsystem.distance() <= -33;
-  //     }),
-  //     frc2::InstantCommand([this] {
-  //       transportSubsystem.enableInnerBelt();
-  //     })
-  // );
+  autocmd.AddRequirements(&transportSubsystem);
 #ifdef USE_XBOX_CONTROLS
   driveSubsystem.SetDefaultCommand(DriveCommand(&driveSubsystem, &controller));
 #else
@@ -145,7 +135,7 @@ void RobotContainer::ConfigureButtonBindings() {
       transportSubsystem.enableOuterBelt();
     }),
     frc2::WaitUntilCommand([this] {return transportSubsystem.hasInnerBall();}).WithTimeout(2.0_s)
-  ));
+  ), {&transportSubsystem});
   // drive forwards to line
   frc2::JoystickButton(&control1, 9).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
   // drive backwards to line
