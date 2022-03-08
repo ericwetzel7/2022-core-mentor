@@ -25,4 +25,5 @@ class Robot : public frc::TimedRobot {
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   RobotContainer m_container;
+  frc2::Command* autocmd;
 };

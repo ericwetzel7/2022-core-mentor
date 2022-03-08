@@ -28,8 +28,18 @@
 
 #include <cstdio>
 
-RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAlliance()), autocmd(nullptr) {
+RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAlliance()) {
   // Initialize all of your commands and subsystems here
+  // autocmd = frc2::SequentialCommandGroup(
+  //     DriveToLineCommand(&driveSubsystem, false),
+  //     frc2::InstantCommand([this]{driveSubsystem.resetDistance();}),
+  //     DriveUntilCommand(&driveSubsystem, false, [this] {
+  //       return driveSubsystem.distance() <= -33;
+  //     }),
+  //     frc2::InstantCommand([this] {
+  //       transportSubsystem.enableInnerBelt();
+  //     })
+  // );
 #ifdef USE_XBOX_CONTROLS
   driveSubsystem.SetDefaultCommand(DriveCommand(&driveSubsystem, &controller));
 #else
@@ -51,6 +61,8 @@ RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAll
       innerTimer.Reset();
     } else if(innerTimer.HasElapsed(0.15_s)) {
         transportSubsystem.disableInnerBelt();
+    } else {
+      transportSubsystem.enableInnerBelt();
     }
   }, {&transportSubsystem}));
 
@@ -131,13 +143,13 @@ void RobotContainer::ConfigureButtonBindings() {
     frc2::RunCommand([this]{
       transportSubsystem.enableInnerBelt();
       transportSubsystem.enableOuterBelt();
-    }).WithTimeout(2.0_s),
+    }),
     frc2::WaitUntilCommand([this] {return transportSubsystem.hasInnerBall();}).WithTimeout(2.0_s)
   ));
   // drive forwards to line
-  // frc2::JoystickButton(&control1, 9).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
+  frc2::JoystickButton(&control1, 9).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, true));
   // drive backwards to line
-  // frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
+  frc2::JoystickButton(&control1, 11).ToggleWhenPressed(DriveToLineCommand(&driveSubsystem, false));
   // disable/re-enable shooter
   frc2::JoystickButton(&control1, 7).ToggleWhenPressed(frc2::StartEndCommand(
     [this]{shooterSubsystem.disableFlywheel();},
@@ -180,27 +192,10 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&control2, 5).ToggleWhenPressed(upper_arms_release);
 #endif
   
-  frc2::Trigger([this]{return driveSubsystem.seesLine();}).WhenActive(frc2::PrintCommand("I see the line!"));
   // TODO list
 }
 
 frc2::Command* RobotContainer::autonomousCommand() {
-  // *autocmd = frc2::SequentialCommandGroup(
-  //   DriveToLineCommand(&driveSubsystem, false),
-  //   frc2::InstantCommand([this] {
-  //     transportSubsystem.enableInnerBelt();
-  //     // transportSubsystem.enableOuterBelt();
-  //   }),
-  //   frc2::WaitCommand(5.0_s),
-  //   // frc2::InstantCommand([this] {
-  //   //   transportSubsystem.disableInnerBelt();
-  //   //   transportSubsystem.disableOuterBelt();
-  //   // }),
-  //   DriveUntilCommand(&driveSubsystem, false, [this]{return driveSubsystem.distance() > 72;})
-  //   // }).WithInterrupt([this] {return driveSubsystem.distance() > 72;})
-  // );
-  return nullptr;
-
-  return autocmd;  
+  return &autocmd;  
 }
 

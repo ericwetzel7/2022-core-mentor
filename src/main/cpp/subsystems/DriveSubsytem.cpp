@@ -14,6 +14,10 @@ DriveSubsystem::DriveSubsystem(double deadband, bool squareXInput, bool squareYI
     frontRight.SetInverted(true);
     rearRight.SetInverted(true);
 
+    eachEncoder([](rev::SparkMaxRelativeEncoder& e) {
+        e.SetPositionConversionFactor(6/M_PI);
+    });
+
     resetDistance();
     resetGyro();
 }
@@ -54,15 +58,15 @@ void DriveSubsystem::freeTurn(double speed) {
 
 double DriveSubsystem::distance() {
     double total = 0;
-    eachMotor([&total](rev::CANSparkMax& m){
-       total += m.GetEncoder().GetPosition();
+    eachEncoder([&total](rev::SparkMaxRelativeEncoder& e){
+       total += e.GetPosition();
     });
     return total / constants::drive::MOTOR_COUNT;
 }
 
 void DriveSubsystem::resetDistance() {
-    eachMotor([](rev::CANSparkMax& m) {
-        m.GetEncoder().SetPosition(0);
+    eachEncoder([](rev::SparkMaxRelativeEncoder& e) {
+        e.SetPosition(0);
     });
 }
 

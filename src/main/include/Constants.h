@@ -42,7 +42,7 @@ namespace constants {
         constexpr int SHOOTER_MOTOR = 8;
 
         // original: 3800
-        constexpr double FLYWHEEL_RPM = 3600;
+        constexpr double FLYWHEEL_RPM = 3500;
         namespace pid {
             constexpr double P = 7e-5;
             constexpr double I = 5e-7;

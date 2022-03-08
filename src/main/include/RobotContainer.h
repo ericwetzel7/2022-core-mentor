@@ -7,6 +7,15 @@
 #include "Constants.h"
 
 #include <frc2/command/Command.h>
+#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc2/command/WaitCommand.h>
+
+#include "commands/DriveToLineCommand.h"
+#include "commands/DriveUntilCommand.h"
+
+#include <units/time.h>
+
 #ifdef USE_XBOX_CONTROLS
   #include <frc/XboxController.h>
 #else
@@ -49,5 +58,15 @@ private:
   frc::Timer innerTimer;
   void ConfigureButtonBindings();
 
-  frc2::Command* autocmd;
+  frc2::SequentialCommandGroup autocmd{
+      DriveToLineCommand(&driveSubsystem, false),
+      frc2::InstantCommand([this]{driveSubsystem.resetDistance();}),
+      DriveUntilCommand(&driveSubsystem, false, [this] {
+        return driveSubsystem.distance() <= -33;
+      }),
+      frc2::InstantCommand([this] {
+        transportSubsystem.enableInnerBelt();
+      })//,
+      // frc2::WaitCommand(5.0_s)
+  };
 };

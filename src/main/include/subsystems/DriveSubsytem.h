@@ -51,6 +51,11 @@ private:
 
     frc::DigitalInput lineSensor{constants::drive::LINE_SENSOR};
 
+
+    rev::SparkMaxRelativeEncoder frontLeftEnc = frontLeft.GetEncoder();
+    rev::SparkMaxRelativeEncoder rearLeftEnc = rearLeft.GetEncoder();
+    rev::SparkMaxRelativeEncoder frontRightEnc = frontRight.GetEncoder();
+    rev::SparkMaxRelativeEncoder rearRightEnc = rearRight.GetEncoder();
     // Basic functional iterator. Accumulation can be done by 
     // capturing the accumulator in a lambda.
     void eachMotor(std::function<void(rev::CANSparkMax&)> f) {
@@ -59,4 +64,12 @@ private:
         f(frontRight);
         f(rearRight);
     }
+
+    void eachEncoder(std::function<void(rev::SparkMaxRelativeEncoder&)> f) {
+        f(frontLeftEnc);
+        f(rearLeftEnc);
+        f(frontRightEnc);
+        f(rearRightEnc);
+    }
+
 };
