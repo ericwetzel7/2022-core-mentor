@@ -51,8 +51,6 @@ RobotContainer::RobotContainer() : transportSubsystem(frc::DriverStation::GetAll
       innerTimer.Reset();
     } else if(innerTimer.HasElapsed(0.15_s)) {
         transportSubsystem.disableInnerBelt();
-    } else {
-      transportSubsystem.enableInnerBelt();
     }
   }, {&transportSubsystem}));
 
